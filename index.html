@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a1420" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Living Stream" />
+  <meta name="description" content="31 Days of Kingdom Authority – Living Stream Daily Devotional, October 2026" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="icon.svg" />
+  <title>Living Stream – 31 Days of Kingdom Authority</title>
+  <style>
+    :root {
+      --navy: #0a1420;
+      --navy-light: #122033;
+      --gold: #c9a227;
+      --gold-light: #e8d48b;
+      --cream: #f8f1e3;
+      --red: #8b1a1a;
+      --text: #e8e4dc;
+      --text-muted: #a8a094;
+      --card: #122033;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* ========== SCREENS ========== */
+    .screen { display: none; min-height: 100%; padding-bottom: calc(70px + var(--safe-bottom)); }
+    .screen.active { display: block; }
+
+    /* ========== HEADER ========== */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--navy);
+      border-bottom: 1px solid rgba(201,162,39,0.25);
+      padding: calc(12px + var(--safe-top)) 16px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .app-header h1 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.5px;
+    }
+    .app-header .sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+    .back-btn {
+      background: none;
+      border: 1px solid rgba(201,162,39,0.4);
+      color: var(--gold);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ========== HOME ========== */
+    .home-hero {
+      text-align: center;
+      padding: 28px 20px 20px;
+      background: linear-gradient(180deg, #0f1c2e 0%, var(--navy) 100%);
+    }
+    .crown {
+      font-size: 42px;
+      margin-bottom: 8px;
+    }
+    .home-hero h2 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--gold);
+      line-height: 1.2;
+    }
+    .home-hero .tagline {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-style: italic;
+      margin: 10px 0 6px;
+    }
+    .home-hero .month {
+      font-size: 12px;
+      color: var(--gold-light);
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .progress-bar-wrap {
+      margin: 18px 20px 8px;
+      background: var(--navy-light);
+      border-radius: 8px;
+      height: 6px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      border-radius: 8px;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+    .progress-text {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .day-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      gap: 10px;
+      padding: 8px 16px 24px;
+    }
+    .day-chip {
+      background: var(--card);
+      border: 1px solid rgba(201,162,39,0.2);
+      border-radius: 12px;
+      padding: 12px 6px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .day-chip:active { transform: scale(0.96); }
+    .day-chip.completed {
+      border-color: var(--gold);
+      background: rgba(201,162,39,0.12);
+    }
+    .day-chip .num {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+    .day-chip .label {
+      font-size: 9px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ========== DAY VIEW ========== */
+    .day-content {
+      padding: 16px 18px 30px;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .day-title {
+      text-align: center;
+      margin-bottom: 14px;
+    }
+    .day-title .day-num {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 1px;
+    }
+    .day-title h2 {
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      margin: 4px 0;
+      line-height: 1.25;
+    }
+    .day-title .main-text {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .section {
+      margin-bottom: 18px;
+    }
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .section-label::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: rgba(201,162,39,0.25);
+    }
+
+    .key-verse {
+      background: rgba(201,162,39,0.08);
+      border-left: 3px solid var(--gold);
+      padding: 12px 14px;
+      border-radius: 0 10px 10px 0;
+      font-style: italic;
+      font-size: 14px;
+      color: var(--cream);
+      line-height: 1.55;
+    }
+
+    .body-text {
+      font-size: 14.5px;
+      color: var(--text);
+      line-height: 1.65;
+    }
+    .body-text p { margin-bottom: 12px; }
+
+    .kingdom-truth {
+      text-align: center;
+      font-weight: 700;
+      font-style: italic;
+      font-size: 15px;
+      color: var(--gold-light);
+      padding: 14px 12px;
+      border-top: 1px solid rgba(201,162,39,0.3);
+      border-bottom: 1px solid rgba(201,162,39,0.3);
+      margin: 4px 0;
+    }
+
+    .app-list {
+      list-style: none;
+      padding: 0;
+    }
+    .app-list li {
+      position: relative;
+      padding: 8px 0 8px 22px;
+      font-size: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .app-list li::before {
+      content: "▸";
+      position: absolute;
+      left: 4px;
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .reflection-q {
+      font-style: italic;
+      font-size: 13.5px;
+      color: var(--text-muted);
+      padding: 4px 0 4px 12px;
+      border-left: 2px solid rgba(201,162,39,0.4);
+      margin-bottom: 6px;
+    }
+
+    .prayer-box {
+      background: var(--navy-light);
+      border-radius: 12px;
+      padding: 14px;
+      font-style: italic;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .declaration-box {
+      background: linear-gradient(135deg, rgba(201,162,39,0.15), rgba(201,162,39,0.05));
+      border: 1px solid rgba(201,162,39,0.35);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 14.5px;
+      color: var(--gold-light);
+      line-height: 1.5;
+    }
+
+    .reading-plan {
+      font-size: 12px;
+      color: var(--text-muted);
+      padding: 8px 0;
+    }
+
+    .signature {
+      text-align: right;
+      font-size: 12px;
+      color: var(--gold);
+      font-style: italic;
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(201,162,39,0.2);
+    }
+
+    .nav-days {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 24px;
+      padding-top: 8px;
+    }
+    .nav-btn {
+      flex: 1;
+      background: var(--card);
+      border: 1px solid rgba(201,162,39,0.3);
+      color: var(--gold);
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .nav-btn:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+    .mark-btn {
+      width: 100%;
+      margin-top: 12px;
+      background: var(--gold);
+      color: var(--navy);
+      border: none;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .mark-btn.done {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+    }
+
+    /* ========== BOTTOM NAV ========== */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--navy-light);
+      border-top: 1px solid rgba(201,162,39,0.2);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 calc(8px + var(--safe-bottom));
+      z-index: 100;
+    }
+    .nav-item {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 11px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      cursor: pointer;
+      padding: 4px 16px;
+    }
+    .nav-item.active { color: var(--gold); }
+    .nav-item .icon { font-size: 20px; }
+
+    /* ========== ABOUT ========== */
+    .about-content {
+      padding: 24px 20px;
+      text-align: center;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .about-content h2 {
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .about-content p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+    .movement-list {
+      text-align: left;
+      margin: 20px 0;
+    }
+    .movement-item {
+      background: var(--card);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      border-left: 3px solid var(--gold);
+    }
+    .movement-item strong {
+      color: var(--gold-light);
+      font-size: 13px;
+    }
+    .movement-item span {
+      display: block;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* ========== INSTALL BANNER ========== */
+    .install-banner {
+      display: none;
+      background: linear-gradient(90deg, #1a2a40, #122033);
+      border: 1px solid rgba(201,162,39,0.4);
+      margin: 12px 16px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      align-items: center;
+      gap: 12px;
+    }
+    .install-banner.show { display: flex; }
+    .install-banner p {
+      flex: 1;
+      font-size: 13px;
+      color: var(--cream);
+    }
+    .install-banner button {
+      background: var(--gold);
+      color: var(--navy);
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 12px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== HOME SCREEN ========== -->
+  <div id="home" class="screen active">
+    <div class="home-hero">
+      <div class="crown">👑</div>
+      <h2>31 DAYS OF<br>KINGDOM AUTHORITY</h2>
+      <p class="tagline">Know the King. Know Your Authority.<br>Occupy Your Place.</p>
+      <p class="month">OCTOBER 2026</p>
+    </div>
+
+    <div id="installBanner" class="install-banner">
+      <p>Install this app on your home screen for offline access</p>
+      <button id="installBtn">Install</button>
+    </div>
+
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <p class="progress-text" id="progressText">0 of 31 days completed</p>
+
+    <div class="day-grid" id="dayGrid"></div>
+  </div>
+
+  <!-- ========== DAY SCREEN ========== -->
+  <div id="day" class="screen">
+    <div class="app-header">
+      <button class="back-btn" onclick="showScreen('home')">←</button>
+      <div style="text-align:center;flex:1">
+        <h1>LIVING STREAM</h1>
+        <div class="sub">Daily Devotional</div>
+      </div>
+      <div style="width:36px"></div>
+    </div>
+    <div class="day-content" id="dayContent"></div>
+  </div>
+
+  <!-- ========== ABOUT SCREEN ========== -->
+  <div id="about" class="screen">
+    <div class="app-header">
+      <button class="back-btn" onclick="showScreen('home')">←</button>
+      <div style="text-align:center;flex:1">
+        <h1>ABOUT</h1>
+      </div>
+      <div style="width:36px"></div>
+    </div>
+    <div class="about-content">
+      <div style="font-size:36px;margin-bottom:8px">👑</div>
+      <h2>Living Stream Daily Devotional</h2>
+      <p><strong style="color:var(--gold)">31 Days of Kingdom Authority</strong></p>
+      <p>October 2026</p>
+      <p>A daily journey to know the King, understand your identity and authority in Christ, and occupy your place of Kingdom impact.</p>
+
+      <div class="movement-list">
+        <div class="movement-item"><strong>Days 1–6 · Know the King</strong><span>The Source of All Authority</span></div>
+        <div class="movement-item"><strong>Days 7–11 · Know Who You Are</strong><span>Identity, Position & Delegated Authority</span></div>
+        <div class="movement-item"><strong>Days 12–15 · Receive Kingdom Power</strong><span>Holy Spirit & Faith</span></div>
+        <div class="movement-item"><strong>Days 16–21 · Build the Man</strong><span>Character, Obedience & Maturity</span></div>
+        <div class="movement-item"><strong>Days 22–27 · Serve & Represent</strong><span>Servanthood, Representation & Unity</span></div>
+        <div class="movement-item"><strong>Days 28–31 · Occupy & Impact</strong><span>Position, Dominion & Kingdom Impact</span></div>
+      </div>
+
+      <p style="margin-top:20px;color:var(--gold);font-weight:600">Rev. Silas C. Nentawe</p>
+      <p style="font-size:12px">Senior Pastor · Prevailing Word Gospel Assembly (PWGAI)</p>
+    </div>
+  </div>
+
+  <!-- ========== BOTTOM NAV ========== -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-screen="home" onclick="showScreen('home')">
+      <span class="icon">🏠</span>
+      <span>Home</span>
+    </button>
+    <button class="nav-item" data-screen="day" onclick="goToToday()">
+      <span class="icon">📖</span>
+      <span>Today</span>
+    </button>
+    <button class="nav-item" data-screen="about" onclick="showScreen('about')">
+      <span class="icon">ℹ️</span>
+      <span>About</span>
+    </button>
+  </nav>
+
+  <script>
+    let DAYS = [];
+    let currentDay = 1;
+    let completed = JSON.parse(localStorage.getItem('ls_completed') || '[]');
+    let deferredPrompt = null;
+
+    // Load days data
+    async function init() {
+      try {
+        const res = await fetch('days.json');
+        DAYS = await res.json();
+      } catch (e) {
+        // Fallback if fetch fails (file:// protocol)
+        console.warn('Could not load days.json', e);
+        return;
+      }
+      renderHome();
+      updateProgress();
+      // Register service worker
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
+      }
+    }
+
+    function renderHome() {
+      const grid = document.getElementById('dayGrid');
+      grid.innerHTML = DAYS.map(d => {
+        const done = completed.includes(d.day);
+        return `<div class="day-chip ${done ? 'completed' : ''}" onclick="openDay(${d.day})">
+          <div class="num">${String(d.day).padStart(2,'0')}</div>
+          <div class="label">${d.topic.split(' ').slice(0,2).join(' ')}</div>
+        </div>`;
+      }).join('');
+    }
+
+    function updateProgress() {
+      const pct = (completed.length / 31) * 100;
+      document.getElementById('progressBar').style.width = pct + '%';
+      document.getElementById('progressText').textContent = `${completed.length} of 31 days completed`;
+    }
+
+    function openDay(n) {
+      currentDay = n;
+      const d = DAYS.find(x => x.day === n);
+      if (!d) return;
+
+      const done = completed.includes(n);
+      const content = document.getElementById('dayContent');
+      content.innerHTML = `
+        <div class="day-title">
+          <div class="day-num">DAY ${String(d.day).padStart(2,'0')}</div>
+          <h2>${d.topic}</h2>
+          <div class="main-text">Main Text: ${d.main_text}</div>
+        </div>
+
+        <div class="section">
+          <div class="section-label">Key Verse</div>
+          <div class="key-verse">${d.key_verse}</div>
+        </div>
+
+        <div class="section">
+          <div class="section-label">Devotional Thought</div>
+          <div class="body-text">${d.devotional.split(/\n\n/).map(p => `<p>${p.trim()}</p>`).join('')}</div>
+        </div>
+
+        <div class="section">
+          <div class="section-label">Kingdom Truth</div>
+          <div class="kingdom-truth">${d.kingdom_truth}</div>
+        </div>
+
+        <div class="section">
+          <div class="section-label">Going Deeper</div>
+          <div class="body-text"><p>${d.going_deeper}</p></div>
+        </div>
+
+        <div class="section">
+          <div class="section-label">Today's Application</div>
+          <ul class="app-list">${d.application.map(a => `<li>${a}</li>`).join('')}</ul>
+        </div>
+
+        <div class="section">
+          <div class="section-label">Reflection</div>
+          <div class="reflection-q">What is God showing me today?</div>
+          <div class="reflection-q">Where have I failed to recognize God's authority?</div>
+          <div class="reflection-q">What must change in my response?</div>
+        </div>
+
+        <div class="section">
+          <div class="section-label">Prayer</div>
+          <div class="prayer-box">${d.prayer}</div>
+        </div>
+
+        <div class="section">
+          <div class="section-label">Declaration</div>
+          <div class="declaration-box">${d.declaration}</div>
+        </div>
+
+        <div class="section">
+          <div class="section-label">One Year Bible Reading Plan</div>
+          <div class="reading-plan">${d.reading}</div>
+        </div>
+
+        <div class="signature">Rev. Silas C. Nentawe — Snr Pst PWGAI</div>
+
+        <div class="nav-days">
+          <button class="nav-btn" onclick="openDay(${n-1})" ${n<=1?'disabled':''}>← Day ${n-1}</button>
+          <button class="nav-btn" onclick="openDay(${n+1})" ${n>=31?'disabled':''}>Day ${n+1} →</button>
+        </div>
+        <button class="mark-btn ${done?'done':''}" onclick="toggleComplete(${n})">
+          ${done ? '✓ Completed' : 'Mark as Completed'}
+        </button>
+      `;
+      showScreen('day');
+      window.scrollTo(0,0);
+    }
+
+    function toggleComplete(n) {
+      if (completed.includes(n)) {
+        completed = completed.filter(x => x !== n);
+      } else {
+        completed.push(n);
+      }
+      localStorage.setItem('ls_completed', JSON.stringify(completed));
+      updateProgress();
+      openDay(n); // re-render to update button
+      renderHome();
+    }
+
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      document.querySelectorAll('.nav-item').forEach(n => {
+        n.classList.toggle('active', n.dataset.screen === id);
+      });
+      window.scrollTo(0,0);
+    }
+
+    function goToToday() {
+      // October 2026 → day of month
+      const now = new Date();
+      let day = 1;
+      if (now.getFullYear() === 2026 && now.getMonth() === 9) {
+        day = Math.min(now.getDate(), 31);
+      }
+      openDay(day);
+    }
+
+    // PWA install prompt
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('installBanner').classList.add('show');
+    });
+    document.getElementById('installBtn')?.addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      document.getElementById('installBanner').classList.remove('show');
+    });
+
+    init();
+  </script>
+</body>
+</html>

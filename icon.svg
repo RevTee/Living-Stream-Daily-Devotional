@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#0a1420"/>
+  <path d="M128 320 L160 200 L208 280 L256 160 L304 280 L352 200 L384 320 Z" fill="#c9a227"/>
+  <rect x="120" y="320" width="272" height="36" rx="6" fill="#c9a227"/>
+  <circle cx="208" cy="200" r="14" fill="#e8d48b"/>
+  <circle cx="304" cy="200" r="14" fill="#e8d48b"/>
+  <circle cx="256" cy="160" r="16" fill="#e8d48b"/>
+  <text x="256" y="420" text-anchor="middle" font-family="Arial,sans-serif" font-size="48" font-weight="bold" fill="#e8d48b">LS</text>
+</svg>

@@ -1,0 +1,28 @@
+{
+  "name": "Living Stream – 31 Days of Kingdom Authority",
+  "short_name": "Living Stream",
+  "description": "Daily Devotional for October 2026 – Know the King. Know Your Authority. Occupy Your Place.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a1420",
+  "theme_color": "#0a1420",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
